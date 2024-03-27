@@ -15,7 +15,7 @@ class M1Abrams:
         self.image = pygame.transform.rotate(self.image, 90)
         self.rect = self.image.get_rect()
 
-        #start each new ship at the centre of the screen
+        #start each new tank at the centre of the screen
         self.rect.center = self.screen_rect.center
         self.angle = 0
         self.rotation_speed = 5
@@ -51,17 +51,26 @@ class M1Abrams:
         angle_rad = math.radians(self.angle)
         dx = -self.m1_abrams_speed * math.cos(angle_rad)
         dy = self.m1_abrams_speed * math.sin(angle_rad)
-        self.x += dx
-        self.y += dy
-        
+        new_x = self.x + dx
+        new_y = self.y + dy
+        if (0 <= new_x <= self.screen_rect.width - self.rect.width) and \
+        (0 <= new_y <= self.screen_rect.height - self.rect.height):
+            self.x = new_x
+            self.y = new_y
 
     def move_backward(self):
         """Move the tank backward along its facing axis."""
         angle_rad = math.radians(self.angle)
         dx = self.m1_abrams_speed * math.cos(angle_rad)
         dy = -self.m1_abrams_speed * math.sin(angle_rad)
-        self.x += dx
-        self.y += dy
+        new_x = self.x + dx
+        new_y = self.y + dy
+        if (0 <= new_x <= self.screen_rect.width - self.rect.width) and \
+        (0 <= new_y <= self.screen_rect.height - self.rect.height):
+            self.x = new_x
+            self.y = new_y
+
+
         
 
 
