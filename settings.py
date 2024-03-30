@@ -1,3 +1,5 @@
+
+
 class Settings:
     """A Class to store all settings for Tank Battler"""   
 
@@ -12,6 +14,7 @@ class Settings:
         self.shell_width = 8
         self.shell_height = 8
         self.shell_colour = (60,60,60)
+        
 
 
         

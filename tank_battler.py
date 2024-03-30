@@ -1,5 +1,6 @@
 import sys
 import pygame
+import time
 from settings import Settings
 from m1_abrahams import M1Abrams
 from ammo import Ammo
@@ -20,6 +21,8 @@ class TankBattler:
         pygame.display.set_caption('Tank Battler')
         self.m1_abrams = M1Abrams(self)
         self.shells = pygame.sprite.Group()
+        self.shells_first_fire = time.time()
+        self.reload_time = 1
 
         
     def run_game(self):
@@ -56,7 +59,10 @@ class TankBattler:
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
-            self._fire_shell()
+            current_time = time.time()
+            if current_time - self.shells_first_fire >= self.reload_time:
+                self._fire_shell()
+                self.shells_first_fire = current_time
 
     def _check_keyup_events(self, event):
         """respond to key releases"""
@@ -86,7 +92,8 @@ class TankBattler:
 
     def _remove_offscreen_shells(self):
         """Remove shells that have gone off-screen"""
-        screen_rect = pygame.Rect((0, 0), (self.settings.screen_width, self.settings.screen_height))
+        screen_rect = pygame.Rect((0, 0), (self.settings.screen_width,
+            self.settings.screen_height))
         for shell in self.shells.copy():
             if not screen_rect.colliderect(shell.rect):
                 self.shells.remove(shell)
