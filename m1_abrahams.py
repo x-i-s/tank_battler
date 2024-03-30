@@ -18,8 +18,8 @@ class M1Abrams:
         #start each new tank at the centre of the screen
         self.rect.center = self.screen_rect.center
         self.angle = 0
-        self.rotation_speed = 5
-        self.m1_abrams_speed = 5.7
+        self.rotation_speed = 1.5
+        self.m1_abrams_speed = 2
                 
         self.y = float(self.rect.y)
         self.x = float(self.rect.x)

@@ -2,7 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from m1_abrahams import M1Abrams
-
+from ammo import Ammo
 
 
 class TankBattler:
@@ -19,6 +19,7 @@ class TankBattler:
         )
         pygame.display.set_caption('Tank Battler')
         self.m1_abrams = M1Abrams(self)
+        self.shells = pygame.sprite.Group()
 
         
     def run_game(self):
@@ -26,6 +27,8 @@ class TankBattler:
         while True:
             self._check_events()   
             self.m1_abrams.update() 
+            self.shells.update()
+            self._remove_offscreen_shells()
             self._update_screen()            
             self.clock.tick(60)
 
@@ -52,6 +55,8 @@ class TankBattler:
             self.m1_abrams.moving_backwards = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_shell()
 
     def _check_keyup_events(self, event):
         """respond to key releases"""
@@ -64,14 +69,27 @@ class TankBattler:
         elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
             self.m1_abrams.moving_backwards = False 
 
+    def _fire_shell(self):
+        """Create a new shell and add it to the shells group."""
+        new_shell = Ammo(self)
+        self.shells.add(new_shell)
                 
 
     def _update_screen(self):
         """Update images on the screen and flip to the new screen."""
         self.screen.fill(self.settings.bg_colour)
+        for shell in self.shells.sprites():
+            shell.draw_shell()
         self.m1_abrams.blitme()
         #make the most recently drawn screen visible
         pygame.display.flip()
+
+    def _remove_offscreen_shells(self):
+        """Remove shells that have gone off-screen"""
+        screen_rect = pygame.Rect((0, 0), (self.settings.screen_width, self.settings.screen_height))
+        for shell in self.shells.copy():
+            if not screen_rect.colliderect(shell.rect):
+                self.shells.remove(shell)
 
 
 if __name__ == "__main__":
